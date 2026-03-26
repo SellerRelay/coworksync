@@ -1,11 +1,14 @@
 @echo off
+echo Generating icons...
+python coworksync/generate_icons.py
+if errorlevel 1 (
+    echo Icon generation failed!
+    pause
+    exit /b 1
+)
+echo.
 echo Building CoworkSync...
-pyinstaller --onefile --windowed --name CoworkSync ^
-  --icon coworksync/assets/icon_green.ico ^
-  --add-data "coworksync/assets;assets" ^
-  --add-data "coworksync/templates;coworksync/templates" ^
-  --add-data "coworksync/static;coworksync/static" ^
-  coworksync/main.py
+pyinstaller --clean CoworkSync.spec
 echo.
 echo Done. Output: dist\CoworkSync.exe
 pause

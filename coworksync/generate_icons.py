@@ -28,9 +28,17 @@ def create_icon(color, filename):
     # Simple "S" shape to suggest sync
     draw.text((cx - 6, cy - 10), "S", fill=arrow_color)
 
-    path = os.path.join(ASSETS_DIR, filename)
-    img.save(path, "PNG")
-    print(f"Created {path}")
+    png_path = os.path.join(ASSETS_DIR, filename)
+    img.save(png_path, "PNG")
+    print(f"Created {png_path}")
+
+    # Also save as .ico for PyInstaller exe icon
+    ico_path = os.path.join(ASSETS_DIR, filename.replace(".png", ".ico"))
+    # ICO needs multiple sizes for best display
+    ico_sizes = [(16, 16), (32, 32), (48, 48), (64, 64)]
+    ico_images = [img.resize(s, Image.LANCZOS) for s in ico_sizes]
+    ico_images[0].save(ico_path, format="ICO", sizes=ico_sizes, append_images=ico_images[1:])
+    print(f"Created {ico_path}")
 
 
 def main():
